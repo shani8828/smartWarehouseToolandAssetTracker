@@ -2,26 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-white text-slate-800 antialiased;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply btn bg-gradient-to-b from-navy-600 to-navy text-white shadow-sm hover:from-navy-700 hover:to-navy-600;
+  }
+  .btn-secondary {
+    @apply btn border border-slate-300 bg-white text-slate-700 shadow-sm hover:bg-slate-50;
+  }
+  .btn-danger {
+    @apply btn bg-red-600 text-white shadow-sm hover:bg-red-700;
+  }
+  .table-base {
+    @apply w-full text-sm;
+  }
+  .table-base thead th {
+    @apply whitespace-nowrap px-4 py-2.5 text-left text-xs font-medium text-slate-500;
+  }
+  .table-base tbody td {
+    @apply px-4 py-3 align-middle;
+  }
+  .table-base tbody tr {
+    @apply border-t border-slate-100 transition-colors hover:bg-slate-50/70;
+  }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .animate-fade-in {
+    animation: fade-in 180ms ease-out both;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none;
+  }
+}
+
+@media print {
+  @page {
+    margin: 10mm;
   }
 }
