@@ -17,18 +17,29 @@ export async function login(_prev: LoginState, form: FormData): Promise<LoginSta
   const parsed = loginInput.safeParse({ email: form.get("email"), password: form.get("password") });
   if (!parsed.success) return { error: "Enter your email and password" };
 
-  await connectDB();
-  const user = await User.findOne({ email: parsed.data.email, isActive: true }).select("+passwordHash").lean();
-  const ok = user?.passwordHash && (await bcrypt.compare(parsed.data.password, user.passwordHash));
-  if (!user || !ok) return { error: "Incorrect email or password" };
+  let token: string;
+  try {
+    await connectDB();
+    const user = await User.findOne({ email: parsed.data.email, isActive: true }).select("+passwordHash").lean();
+    const ok = user?.passwordHash && (await bcrypt.compare(parsed.data.password, user.passwordHash));
+    if (!user || !ok) return { error: "Incorrect email or password" };
 
-  const token = await signSession({
-    sub: String(user._id),
-    name: user.name,
-    email: user.email,
-    role: user.role as Role,
-    department: user.department,
-  });
+    token = await signSession({
+      sub: String(user._id),
+      name: user.name,
+      email: user.email,
+      role: user.role as Role,
+      department: user.department,
+    });
+  } catch (err) {
+    // Show a readable message instead of crashing the page, and keep the
+    // details in the server logs (e.g. Vercel > Logs).
+    console.error("[login] sign-in failed:", err);
+    const msg = err instanceof Error ? err.message : String(err);
+    if (/SESSION_SECRET/.test(msg)) return { error: "Server is misconfigured: SESSION_SECRET is not set." };
+    if (/MONGODB_URI/.test(msg)) return { error: "Server is misconfigured: MONGODB_URI is not set." };
+    return { error: "Sign-in is unavailable: the server could not reach the database. Please try again shortly." };
+  }
   cookies().set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
