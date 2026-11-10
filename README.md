@@ -63,9 +63,9 @@ Created by `npm run seed`:
 
 | Role | Email | Password |
 | --- | --- | --- |
-| Admin | admin.iselab@example.com | admin123 |
-| Lab staff | staff.iselab@example.com | staff123 |
-| Borrower | priya.n@example.com | student123 |
+| Admin | admin@gmail.com | admin123 |
+| Lab staff | staff@gmail.com | staff123 |
+| Borrower | student@gmail.com | student123 |
 
 Camera scanning needs `localhost` or HTTPS. To test on a phone locally, use an HTTPS tunnel such as `ngrok http 3000`.
 

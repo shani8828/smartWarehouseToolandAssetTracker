@@ -343,7 +343,7 @@ export const EXAMPLE_QUERIES = [
   "How many tools are available in the metrology lab?",
   "Which drills are overdue?",
   "Tools due this week",
-  "What does Priya have?",
+  "What does Shani have?",
   "Damaged gauges under maintenance",
   "Fluke tools issued in the last 7 days",
 ];

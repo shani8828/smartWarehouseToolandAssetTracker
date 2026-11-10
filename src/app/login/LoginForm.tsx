@@ -8,9 +8,9 @@ import { Field, inputCls } from "@/components/ui";
 
 // Accounts created by `npm run seed` (local demo data only)
 const DEMO = [
-  { label: "Admin", email: "admin.iselab@example.com", password: "admin123" },
-  { label: "Lab staff", email: "staff.iselab@example.com", password: "staff123" },
-  { label: "Student", email: "priya.n@example.com", password: "student123" },
+  { label: "Admin", email: "admin@gmail.com", password: "admin123" },
+  { label: "Lab staff", email: "staff@gmail.com", password: "staff123" },
+  { label: "Student", email: "student@gmail.com", password: "student123" },
 ];
 
 export default function LoginForm({ next }: { next?: string }) {

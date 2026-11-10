@@ -2,8 +2,8 @@
 // Usage: npm run seed   (WARNING: clears the six project collections first)
 //
 // Demo sign-ins (local development data only):
-//   admin.iselab@example.com / admin123     (Admin)
-//   staff.iselab@example.com / staff123     (Lab staff)
+//   admin@gmail.com / admin123     (Admin)
+//   staff@gmail.com / staff123     (Lab staff)
 //   any student below        / student123   (Borrower)
 import { config } from "dotenv";
 import bcrypt from "bcryptjs";
@@ -30,10 +30,10 @@ const categories = [
 ];
 
 const users = [
-  { name: "Lab In-charge", email: "admin.iselab@example.com", role: "ADMIN", department: "ISE", password: "admin123" },
-  { name: "Lab Assistant", email: "staff.iselab@example.com", role: "LAB_STAFF", department: "ISE", password: "staff123" },
+  { name: "Lab In-charge", email: "admin@gmail.com", role: "ADMIN", department: "ISE", password: "admin123" },
+  { name: "Lab Assistant", email: "staff@gmail.com", role: "LAB_STAFF", department: "ISE", password: "staff123" },
   { name: "Aarav Sharma", email: "aarav.s@example.com", role: "BORROWER", department: "ISE", rollNumber: "23IM10001", password: "student123" },
-  { name: "Priya Nair", email: "priya.n@example.com", role: "BORROWER", department: "ISE", rollNumber: "23IM10002", password: "student123" },
+  { name: "Shani Maurya", email: "student@gmail.com", role: "BORROWER", department: "ISE", rollNumber: "23IM30043", password: "student123" },
   { name: "Sneha Patel", email: "sneha.p@example.com", role: "BORROWER", department: "ISE", rollNumber: "23IM10004", password: "student123" },
   { name: "Rohit Das", email: "rohit.d@example.com", role: "BORROWER", department: "ME", rollNumber: "23ME10003", password: "student123" },
   { name: "Karan Mehta", email: "karan.m@example.com", role: "BORROWER", department: "EE", rollNumber: "23EE10005", password: "student123" },
@@ -61,10 +61,10 @@ const assets = [
 const history: [string, string, number, number, number | null, ("GOOD" | "FAIR" | "DAMAGED")?][] = [
   ["ISE-MM-001", "aarav.s@example.com", 13, 7, 8, "GOOD"],
   ["ISE-PD-001", "rohit.d@example.com", 12, 3, 10, "GOOD"],
-  ["ISE-PG-001", "priya.n@example.com", 11, 7, 6, "GOOD"],
+  ["ISE-PG-001", "student@gmail.com", 11, 7, 6, "GOOD"],
   ["ISE-OS-001", "sneha.p@example.com", 10, 2, 9, "GOOD"],
   ["ISE-PG-003", "karan.m@example.com", 9, 7, 4, "DAMAGED"],
-  ["ISE-MM-003", "priya.n@example.com", 8, 7, 3, "GOOD"],
+  ["ISE-MM-003", "student@gmail.com", 8, 7, 3, "GOOD"],
   ["ISE-SS-001", "aarav.s@example.com", 7, 3, 3, "GOOD"],
   ["ISE-PD-002", "rohit.d@example.com", 6, 3, 2, "FAIR"],
   ["ISE-PG-004", "sneha.p@example.com", 5, 7, 1, "GOOD"],
@@ -73,8 +73,8 @@ const history: [string, string, number, number, number | null, ("GOOD" | "FAIR" 
   ["ISE-MM-002", "aarav.s@example.com", 10, 7, null], // 3 days past due
   ["ISE-MM-004", "sneha.p@example.com", 12, 7, null], // 5 days past due
   ["ISE-PD-001", "rohit.d@example.com", 5, 3, null], // 2 days past due
-  ["ISE-OS-001", "priya.n@example.com", 1, 2, null], // due tomorrow
-  ["ISE-PG-001", "priya.n@example.com", 0, 7, null], // due next week
+  ["ISE-OS-001", "student@gmail.com", 1, 2, null], // due tomorrow
+  ["ISE-PG-001", "student@gmail.com", 0, 7, null], // due next week
   ["ISE-SS-002", "karan.m@example.com", 2, 3, null], // due tomorrow
 ];
 
@@ -96,8 +96,8 @@ async function main() {
     ),
   );
   const userId = new Map(userDocs.map((u) => [u.email, u._id]));
-  const staffId = userId.get("staff.iselab@example.com")!;
-  const adminId = userId.get("admin.iselab@example.com")!;
+  const staffId = userId.get("staff@gmail.com")!;
+  const adminId = userId.get("admin@gmail.com")!;
 
   const assetDocs = await Asset.insertMany(
     assets.map((raw) => {
