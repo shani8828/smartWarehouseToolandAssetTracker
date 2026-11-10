@@ -1,8 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { SESSION_COOKIE, verifySession } from "@/lib/auth";
 
-// Every page and API route needs a valid session, except the login page and
-// the cron endpoint (which checks its own secret).
+// Every page and API route needs a valid session, except the login page.
 export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
   const session = await verifySession(req.cookies.get(SESSION_COOKIE)?.value);
@@ -19,5 +18,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/cron|api/health).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/health).*)"],
 };

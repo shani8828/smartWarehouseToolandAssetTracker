@@ -229,7 +229,7 @@ export async function getDashboard() {
     AuditLog.find().populate("actor", "name").sort({ at: -1 }).limit(8).lean(),
     Alert.countDocuments({ resolvedAt: null }),
     User.countDocuments({ isActive: true }),
-    // Counted from the loans themselves so it is right even before the hourly audit runs
+    // Counted from the loans themselves so it is right even before the overdue audit runs
     CustodyTransaction.countDocuments({ status: "ACTIVE", dueAt: { $lt: now } }),
   ]);
 

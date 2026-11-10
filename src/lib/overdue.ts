@@ -19,7 +19,8 @@ type LoanRow = {
 const g = globalThis as unknown as { _lastSweep?: SweepResult };
 export const lastSweep = () => g._lastSweep ?? null;
 
-// Hourly audit: finds open loans past their due date, flags the asset as
+// Overdue audit (run by staff from the dashboard or Alerts page): finds open
+// loans past their due date, flags the asset as
 // OVERDUE, and emails the borrower once per loan.
 export async function runOverdueSweep(now = new Date()): Promise<SweepResult> {
   await connectDB();

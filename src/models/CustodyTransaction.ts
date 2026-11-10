@@ -26,7 +26,7 @@ CustodyTransactionSchema.index(
 );
 // Borrower history and "what is this person holding"
 CustodyTransactionSchema.index({ borrower: 1, status: 1 });
-// Hourly overdue sweep: open loans ordered by due date
+// Overdue audit: open loans ordered by due date
 CustodyTransactionSchema.index({ status: 1, dueAt: 1 });
 
 export type CustodyTransactionDoc = InferSchemaType<typeof CustodyTransactionSchema>;

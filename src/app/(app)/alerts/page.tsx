@@ -18,7 +18,7 @@ export default async function AlertsPage() {
     <>
       <PageHeader
         title="Alerts"
-        description="Overdue and damage exceptions. The overdue audit runs automatically every hour."
+        description="Overdue and damage exceptions. Run the overdue audit to flag past-due loans."
         actions={<AuditButton />}
       />
       <Section title={`Open (${open.length})`} items={open} empty="No open alerts." />
