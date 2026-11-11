@@ -5,7 +5,9 @@ import type { Html5Qrcode } from "html5-qrcode";
 import { Camera, CameraOff, ImageUp, LoaderCircle } from "lucide-react";
 
 const READER_ID = "qr-reader";
-const DUPLICATE_WINDOW_MS = 2500; // ignore the same code while it stays in frame
+// A code that is held in frame is reported once. It counts again only after it has
+// been out of view this long (tolerates a few missed decode frames while held steady).
+const LEAVE_FRAME_MS = 1500;
 
 type Cam = { id: string; label: string };
 export type ScanSource = "camera" | "image";
@@ -31,7 +33,8 @@ function confirmScan() {
 // In-browser QR / 1D barcode decoder on the device camera (html5-qrcode / ZXing).
 export default function Scanner({ onScan }: { onScan: (text: string, format: string, source: ScanSource) => void }) {
   const scannerRef = useRef<Html5Qrcode | null>(null);
-  const lastRef = useRef<{ text: string; at: number } | null>(null);
+  // Code currently locked on, and when the camera last decoded it.
+  const lastRef = useRef<{ text: string; seenAt: number } | null>(null);
   const onScanRef = useRef(onScan);
   onScanRef.current = onScan;
 
@@ -44,8 +47,12 @@ export default function Scanner({ onScan }: { onScan: (text: string, format: str
   const record = useCallback((text: string, format: string, source: ScanSource) => {
     const now = Date.now();
     const last = lastRef.current;
-    if (source === "camera" && last && last.text === text && now - last.at < DUPLICATE_WINDOW_MS) return;
-    lastRef.current = { text, at: now };
+    if (source === "camera" && last && last.text === text && now - last.seenAt < LEAVE_FRAME_MS) {
+      // Same code still in view: keep the lock alive, do not report it again.
+      last.seenAt = now;
+      return;
+    }
+    lastRef.current = { text, seenAt: now };
     confirmScan();
     onScanRef.current(text, format, source);
   }, []);
@@ -74,6 +81,7 @@ export default function Scanner({ onScan }: { onScan: (text: string, format: str
     if (!s) return;
     setError(null);
     setStarting(true);
+    lastRef.current = null; // a fresh camera session may scan the same code again
     try {
       // Ask for permission and list cameras on first start, preferring the back camera
       let id = cameraId;
